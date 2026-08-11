@@ -1,0 +1,32 @@
+/* Waterlift Solar brand palette, sampled from public/assets/img/waterlift-logo.jpeg.
+   Shared by admin and public pages so both read as one system. */
+
+:root {
+    --wl-navy: #201b5c;
+    --wl-blue: #2fa5df;
+    --wl-orange: #f1721e;
+    --wl-navy-rgb: 32, 27, 92;
+}
+
+.navbar-dark.bg-dark {
+    background-color: var(--wl-navy) !important;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--wl-blue);
+    --bs-btn-border-color: var(--wl-blue);
+    --bs-btn-hover-bg: #268fc2;
+    --bs-btn-hover-border-color: #268fc2;
+    --bs-btn-active-bg: #217da9;
+    --bs-btn-active-border-color: #217da9;
+    --bs-btn-focus-shadow-rgb: var(--wl-navy-rgb);
+}
+
+a {
+    color: var(--wl-blue);
+}
+
+.badge.bg-warning {
+    color: #fff;
+    background-color: var(--wl-orange) !important;
+}

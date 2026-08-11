@@ -1,0 +1,38 @@
+/* Waterlift Solar Expo System — admin overrides. */
+
+.tabular-nums {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Stat tiles: label (muted, small caps) + value (semibold, proportional
+   figures — these are standalone numbers, not a column, so no tabular-nums). */
+.stat-tile .stat-label {
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #6c757d;
+    margin-bottom: .25rem;
+}
+
+.stat-tile .stat-value {
+    font-size: 1.9rem;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.stat-tile .stat-sub {
+    font-size: .8rem;
+    color: #6c757d;
+    margin-top: .25rem;
+}
+
+/* Possible-duplicates tile only turns this on when count > 0 — color plus
+   an icon and label, never color alone (see dataviz skill status-color rule). */
+.stat-tile-warning {
+    border-color: var(--wl-orange);
+}
+
+.stat-sub-warning {
+    color: var(--wl-orange);
+    font-weight: 600;
+}

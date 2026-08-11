@@ -1,0 +1,43 @@
+/* Public visitor form: large touch targets, minimal scrolling, no animation.
+   Visitors are strangers scanning a QR code mid-conversation at a booth. */
+
+.public-page {
+    background-color: #f5f7fa;
+}
+
+.public-logo {
+    max-height: 90px;
+}
+
+.public-page .form-control,
+.public-page .form-select,
+.public-page .btn {
+    font-size: 1.05rem;
+    padding-top: .65rem;
+    padding-bottom: .65rem;
+}
+
+.public-page .form-check-input {
+    width: 1.3em;
+    height: 1.3em;
+    margin-top: 0.15em;
+}
+
+.public-page .btn-submit {
+    width: 100%;
+    font-weight: 600;
+}
+
+/* Honeypot: visually hidden (not display:none, so it still fools bots that
+   skip hidden fields), clipped in place rather than pushed off-screen —
+   an offset like left:-9999px can widen the document and cause an
+   unwanted horizontal scrollbar on narrow viewports. */
+.hp-field {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
