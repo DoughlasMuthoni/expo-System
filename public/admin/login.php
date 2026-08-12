@@ -37,14 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login — Waterlift Solar Expo System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="/assets/css/brand.css" rel="stylesheet">
     <link href="/assets/css/admin.css" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body style="background-color: #f6f7fb;">
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-sm-8 col-md-5 col-lg-4">
-            <div class="card shadow-sm mt-5">
+            <div class="card auth-card mt-5">
                 <div class="card-body p-4">
                     <div class="text-center mb-4">
                         <img src="/assets/img/waterlift-logo.jpeg" alt="Waterlift Solar"
@@ -68,7 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control" id="password" name="password" required>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Log In</button>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-box-arrow-in-right"></i> Log In
+                        </button>
                     </form>
                 </div>
             </div>

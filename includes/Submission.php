@@ -141,6 +141,15 @@ class Submission
         return $row ?: null;
     }
 
+    /** Admin-editable: add or correct the message on an existing submission. */
+    public static function updateMessage(int $id, ?string $message): void
+    {
+        $stmt = Database::getConnection()->prepare(
+            'UPDATE expo_submissions SET message = :message WHERE id = :id'
+        );
+        $stmt->execute(['message' => $message, 'id' => $id]);
+    }
+
     /**
      * Other submissions sharing the same phone + expo, so an admin reviewing
      * a flagged submission can jump straight to what it's a possible duplicate

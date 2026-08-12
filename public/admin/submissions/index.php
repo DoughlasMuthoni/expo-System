@@ -42,15 +42,22 @@ require __DIR__ . '/../../../includes/admin_header.php';
         </div>
     </form>
     <div class="d-flex gap-2">
-        <a href="/admin/submissions/export.php?format=csv<?= $exportQs ?>" class="btn btn-sm btn-outline-secondary flex-fill flex-md-grow-0">Export CSV</a>
-        <a href="/admin/submissions/export.php?format=xlsx<?= $exportQs ?>" class="btn btn-sm btn-outline-secondary flex-fill flex-md-grow-0">Export Excel</a>
+        <a href="/admin/submissions/export.php?format=csv<?= $exportQs ?>" class="btn btn-sm btn-outline-secondary flex-fill flex-md-grow-0">
+            <i class="bi bi-filetype-csv"></i> Export CSV
+        </a>
+        <a href="/admin/submissions/export.php?format=xlsx<?= $exportQs ?>" class="btn btn-sm btn-outline-secondary flex-fill flex-md-grow-0">
+            <i class="bi bi-file-earmark-excel"></i> Export Excel
+        </a>
     </div>
 </div>
 
 <?php if (empty($submissions)): ?>
-    <p class="text-muted">
-        No<?= $duplicatesOnly ? ' flagged duplicate' : '' ?> submissions<?= $activeFilterExpo !== null ? ' for ' . e($activeFilterExpo['name']) : '' ?> yet.
-    </p>
+    <div class="empty-state">
+        <i class="bi bi-inbox empty-state-icon"></i>
+        <p class="mb-0">
+            No<?= $duplicatesOnly ? ' flagged duplicate' : '' ?> submissions<?= $activeFilterExpo !== null ? ' for ' . e($activeFilterExpo['name']) : '' ?> yet.
+        </p>
+    </div>
 <?php else: ?>
     <table id="submissionsTable" class="table table-hover align-middle bg-white w-100">
             <thead>
@@ -76,11 +83,13 @@ require __DIR__ . '/../../../includes/admin_header.php';
                         <td><?= e(followUpLabel($row['follow_up_method'])) ?></td>
                         <td>
                             <?php if ($row['is_possible_duplicate']): ?>
-                                <span class="badge bg-warning text-dark">Possible Duplicate</span>
+                                <span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle"></i> Possible Duplicate</span>
                             <?php endif; ?>
                         </td>
                         <td class="text-end">
-                            <a href="/admin/submissions/view.php?id=<?= (int) $row['id'] ?>" class="btn btn-sm btn-outline-secondary">View</a>
+                            <a href="/admin/submissions/view.php?id=<?= (int) $row['id'] ?>" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-eye"></i> View
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

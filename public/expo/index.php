@@ -12,11 +12,9 @@ if ($expo === null) {
     $pageTitle = 'Expo Not Found';
     require __DIR__ . '/../../includes/public_header.php';
     ?>
-    <div class="card shadow-sm">
-        <div class="card-body text-center p-4">
-            <h1 class="h4">We couldn't find that expo</h1>
-            <p class="text-muted mb-0">Please check the QR code or link and try again.</p>
-        </div>
+    <div class="form-card text-center">
+        <h1 class="h4"><?= e(t('expo_not_found_title')) ?></h1>
+        <p class="text-muted mb-0"><?= e(t('expo_not_found_body')) ?></p>
     </div>
     <?php
     require __DIR__ . '/../../includes/public_footer.php';
@@ -27,14 +25,9 @@ if (!$expo['is_active']) {
     $pageTitle = $expo['name'];
     require __DIR__ . '/../../includes/public_header.php';
     ?>
-    <div class="card shadow-sm">
-        <div class="card-body text-center p-4">
-            <h1 class="h4"><?= e($expo['name']) ?></h1>
-            <p class="text-muted mb-0">
-                This expo isn't currently accepting submissions. Thank you for your interest —
-                please check back later or speak to a Waterlift Solar representative directly.
-            </p>
-        </div>
+    <div class="form-card text-center">
+        <h1 class="h4"><?= e($expo['name']) ?></h1>
+        <p class="text-muted mb-0"><?= e(t('expo_inactive_body')) ?></p>
     </div>
     <?php
     require __DIR__ . '/../../includes/public_footer.php';
@@ -67,7 +60,7 @@ $submitted = [
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!Csrf::verify($_POST['csrf_token'] ?? null)) {
-        $errors[] = 'Your session expired. Please refresh the page and try again.';
+        $errors[] = t('err_csrf');
     } elseif (trim((string) ($_POST['company_website'] ?? '')) !== '') {
         // Honeypot tripped — pretend success, don't store or tip off the bot.
         redirect('/expo/success.php?slug=' . urlencode($slug));
@@ -84,19 +77,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $submitted['interest_ids'] = array_values(array_intersect($postedInterestIds, $activeInterestIds));
 
         if (!Validator::required($submitted['full_name']) || !Validator::maxLength($submitted['full_name'], 150)) {
-            $errors[] = 'Full name is required.';
+            $errors[] = t('err_full_name_required');
         }
 
         if (!Validator::required($submitted['phone']) || !Validator::maxLength($submitted['phone'], 30)) {
-            $errors[] = 'Phone number is required.';
+            $errors[] = t('err_phone_required');
         }
 
         if (!Validator::required($submitted['project_location']) || !Validator::maxLength($submitted['project_location'], 255)) {
-            $errors[] = 'Project location is required.';
+            $errors[] = t('err_location_required');
         }
 
         if (empty($submitted['interest_ids'])) {
-            $errors[] = 'Please select at least one interest.';
+            $errors[] = t('err_interest_required');
         }
 
         if (
@@ -104,25 +97,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             && in_array($otherInterestId, $submitted['interest_ids'], true)
             && $submitted['other_text'] === ''
         ) {
-            $errors[] = 'Please describe your "Other" interest.';
+            $errors[] = t('err_other_required');
         }
 
         if (!in_array($submitted['follow_up_method'], ['phone_call', 'whatsapp', 'email'], true)) {
-            $errors[] = 'Please choose a follow-up method.';
+            $errors[] = t('err_followup_required');
         }
 
         if ($submitted['email'] !== '' && !Validator::isEmail($submitted['email'])) {
-            $errors[] = 'Please enter a valid email address.';
+            $errors[] = t('err_email_invalid');
         }
 
         if (!Validator::maxLength($submitted['message'], 2000)) {
-            $errors[] = 'Message is too long.';
+            $errors[] = t('err_message_too_long');
         }
 
         $ipAddress = $_SERVER['REMOTE_ADDR'] ?? null;
 
         if (empty($errors) && $ipAddress !== null && Submission::recentlySubmitted($ipAddress, (int) $expo['id'])) {
-            $errors[] = 'You just submitted this form. Please wait a moment before submitting again.';
+            $errors[] = t('err_rate_limited');
         }
 
         if (empty($errors)) {
@@ -156,86 +149,108 @@ require __DIR__ . '/../../includes/public_header.php';
     <div class="mb-4"></div>
 <?php endif; ?>
 
-<?php if (!empty($errors)): ?>
-    <div class="alert alert-danger">
-        <ul class="mb-0">
-            <?php foreach ($errors as $err): ?>
-                <li><?= e($err) ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-<?php endif; ?>
-
-<form method="post" action="/expo/index.php?slug=<?= urlencode($slug) ?>" novalidate>
-    <?= Csrf::field() ?>
-
-    <div class="hp-field" aria-hidden="true">
-        <label for="company_website">Leave this field blank</label>
-        <input type="text" id="company_website" name="company_website" tabindex="-1" autocomplete="off">
-    </div>
-
-    <div class="mb-3">
-        <label for="full_name" class="form-label">Full Name</label>
-        <input type="text" class="form-control" id="full_name" name="full_name" required maxlength="150"
-               value="<?= e($submitted['full_name']) ?>">
-    </div>
-
-    <div class="mb-3">
-        <label for="phone" class="form-label">Phone Number</label>
-        <input type="tel" class="form-control" id="phone" name="phone" required maxlength="30"
-               value="<?= e($submitted['phone']) ?>">
-    </div>
-
-    <div class="mb-3">
-        <label for="project_location" class="form-label">Project Location</label>
-        <input type="text" class="form-control" id="project_location" name="project_location" required maxlength="255"
-               value="<?= e($submitted['project_location']) ?>">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label d-block">I'm Interested In</label>
-        <?php foreach ($interests as $interest): ?>
-            <?php $checked = in_array((int) $interest['id'], $submitted['interest_ids'], true); ?>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input interest-checkbox"
-                       id="interest_<?= (int) $interest['id'] ?>" name="interests[]"
-                       value="<?= (int) $interest['id'] ?>"
-                       data-is-other="<?= $interest['name'] === 'Other' ? '1' : '0' ?>"
-                       <?= $checked ? 'checked' : '' ?>>
-                <label class="form-check-label" for="interest_<?= (int) $interest['id'] ?>"><?= e($interest['name']) ?></label>
-            </div>
-        <?php endforeach; ?>
-        <div class="mt-2 <?= ($otherInterestId !== null && in_array($otherInterestId, $submitted['interest_ids'], true)) ? '' : 'd-none' ?>"
-             id="other-text-wrap">
-            <input type="text" class="form-control" name="other_text" maxlength="255" placeholder="Please describe"
-                   value="<?= e($submitted['other_text']) ?>">
+<div class="form-card">
+    <?php if (!empty($errors)): ?>
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                <?php foreach ($errors as $err): ?>
+                    <li><?= e($err) ?></li>
+                <?php endforeach; ?>
+            </ul>
         </div>
-    </div>
+    <?php endif; ?>
 
-    <div class="mb-3">
-        <label class="form-label d-block">Preferred Follow-up Method</label>
-        <?php foreach (['phone_call' => 'Phone Call', 'whatsapp' => 'WhatsApp', 'email' => 'Email'] as $value => $label): ?>
-            <div class="form-check">
-                <input type="radio" class="form-check-input" id="followup_<?= e($value) ?>" name="follow_up_method"
-                       value="<?= e($value) ?>" required <?= $submitted['follow_up_method'] === $value ? 'checked' : '' ?>>
-                <label class="form-check-label" for="followup_<?= e($value) ?>"><?= e($label) ?></label>
+    <form method="post" action="/expo/index.php?slug=<?= urlencode($slug) ?>" novalidate>
+        <?= Csrf::field() ?>
+
+        <div class="hp-field" aria-hidden="true">
+            <label for="company_website"><?= e(t('honeypot_label')) ?></label>
+            <input type="text" id="company_website" name="company_website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="form-section-label"><?= e(t('section_your_details')) ?></div>
+
+        <div class="mb-3">
+            <label for="full_name" class="form-label"><?= e(t('field_full_name')) ?></label>
+            <input type="text" class="form-control" id="full_name" name="full_name" required maxlength="150"
+                   value="<?= e($submitted['full_name']) ?>">
+        </div>
+
+        <div class="mb-3">
+            <label for="phone" class="form-label"><?= e(t('field_phone')) ?></label>
+            <input type="tel" class="form-control" id="phone" name="phone" required maxlength="30"
+                   value="<?= e($submitted['phone']) ?>">
+        </div>
+
+        <div class="mb-4">
+            <label for="project_location" class="form-label"><?= e(t('field_project_location')) ?></label>
+            <input type="text" class="form-control" id="project_location" name="project_location" required maxlength="255"
+                   value="<?= e($submitted['project_location']) ?>">
+        </div>
+
+        <div class="form-section-label"><?= e(t('section_your_interests')) ?></div>
+
+        <div class="mb-4">
+            <div class="chip-grid">
+                <?php foreach ($interests as $interest): ?>
+                    <?php $checked = in_array((int) $interest['id'], $submitted['interest_ids'], true); ?>
+                    <div class="option-chip">
+                        <input type="checkbox" class="option-chip-input interest-checkbox"
+                               id="interest_<?= (int) $interest['id'] ?>" name="interests[]"
+                               value="<?= (int) $interest['id'] ?>"
+                               data-is-other="<?= $interest['name'] === 'Other' ? '1' : '0' ?>"
+                               <?= $checked ? 'checked' : '' ?>>
+                        <label class="option-chip-label" for="interest_<?= (int) $interest['id'] ?>"><?= e($interest['name']) ?></label>
+                    </div>
+                <?php endforeach; ?>
             </div>
-        <?php endforeach; ?>
-    </div>
+            <div class="mt-2 <?= ($otherInterestId !== null && in_array($otherInterestId, $submitted['interest_ids'], true)) ? '' : 'd-none' ?>"
+                 id="other-text-wrap">
+                <input type="text" class="form-control" name="other_text" maxlength="255" placeholder="<?= e(t('other_placeholder')) ?>"
+                       value="<?= e($submitted['other_text']) ?>">
+            </div>
+        </div>
 
-    <div class="mb-3">
-        <label for="email" class="form-label">Email <span class="text-muted">(optional)</span></label>
-        <input type="email" class="form-control" id="email" name="email" maxlength="150"
-               value="<?= e($submitted['email']) ?>">
-    </div>
+        <div class="form-section-label"><?= e(t('section_followup')) ?></div>
 
-    <div class="mb-4">
-        <label for="message" class="form-label">Message <span class="text-muted">(optional)</span></label>
-        <textarea class="form-control" id="message" name="message" rows="3" maxlength="2000"><?= e($submitted['message']) ?></textarea>
-    </div>
+        <div class="mb-4">
+            <div class="chip-grid">
+                <?php
+                $followupOptions = [
+                    'phone_call' => t('followup_phone_call'),
+                    'whatsapp'   => t('followup_whatsapp'),
+                    'email'      => t('followup_email'),
+                ];
+                ?>
+                <?php foreach ($followupOptions as $value => $label): ?>
+                    <div class="option-chip option-chip--radio">
+                        <input type="radio" class="option-chip-input" id="followup_<?= e($value) ?>" name="follow_up_method"
+                               value="<?= e($value) ?>" required <?= $submitted['follow_up_method'] === $value ? 'checked' : '' ?>>
+                        <label class="option-chip-label" for="followup_<?= e($value) ?>"><?= e($label) ?></label>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
 
-    <button type="submit" class="btn btn-primary btn-submit">Submit</button>
-</form>
+        <div class="form-section-label">
+            <?= e(t('section_anything_else')) ?>
+            <span class="text-muted text-normal fw-normal"><?= e(t('optional_label')) ?></span>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label"><?= e(t('field_email')) ?></label>
+            <input type="email" class="form-control" id="email" name="email" maxlength="150"
+                   value="<?= e($submitted['email']) ?>">
+        </div>
+
+        <div class="mb-4">
+            <label for="message" class="form-label"><?= e(t('field_message')) ?></label>
+            <textarea class="form-control" id="message" name="message" rows="3" maxlength="2000"><?= e($submitted['message']) ?></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-submit"><?= e(t('btn_submit')) ?></button>
+    </form>
+</div>
 
 <script>
 (function () {

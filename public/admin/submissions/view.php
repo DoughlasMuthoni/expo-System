@@ -24,16 +24,19 @@ require __DIR__ . '/../../../includes/admin_header.php';
 <div class="row">
     <div class="col-lg-10 col-xl-8">
         <div class="mb-3">
-            <a href="/admin/submissions/index.php?expo_id=<?= (int) $submission['expo_id'] ?>" class="btn btn-sm btn-outline-secondary">&larr; Back to Submissions</a>
+            <a href="/admin/submissions/index.php?expo_id=<?= (int) $submission['expo_id'] ?>" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Submissions
+            </a>
         </div>
 
 <?php if (!empty($siblings)): ?>
     <div class="alert alert-warning">
         <p class="mb-2">
+            <i class="bi bi-exclamation-triangle"></i>
             <?php if ($submission['is_possible_duplicate']): ?>
-                &#9888; This phone number already had a submission for this expo before this one — possible duplicate.
+                This phone number already had a submission for this expo before this one — possible duplicate.
             <?php else: ?>
-                &#9888; This phone number has a later submission for this expo, flagged as a possible duplicate of this one.
+                This phone number has a later submission for this expo, flagged as a possible duplicate of this one.
             <?php endif; ?>
             It hasn't been blocked; review both and decide.
         </p>
@@ -66,13 +69,13 @@ require __DIR__ . '/../../../includes/admin_header.php';
         </div>
 
         <dl class="row gy-2 mb-0">
-            <dt class="col-sm-3">Phone</dt>
+            <dt class="col-sm-3"><i class="bi bi-telephone text-muted me-1"></i> Phone</dt>
             <dd class="col-sm-9"><?= e($submission['phone']) ?></dd>
 
-            <dt class="col-sm-3">Project Location</dt>
+            <dt class="col-sm-3"><i class="bi bi-geo-alt text-muted me-1"></i> Project Location</dt>
             <dd class="col-sm-9"><?= e($submission['project_location']) ?></dd>
 
-            <dt class="col-sm-3">Interests</dt>
+            <dt class="col-sm-3"><i class="bi bi-heart text-muted me-1"></i> Interests</dt>
             <dd class="col-sm-9">
                 <?php if (empty($interests)): ?>
                     <span class="text-muted">&mdash;</span>
@@ -90,15 +93,27 @@ require __DIR__ . '/../../../includes/admin_header.php';
                 <?php endif; ?>
             </dd>
 
-            <dt class="col-sm-3">Follow-up Method</dt>
+            <dt class="col-sm-3"><i class="bi bi-arrow-repeat text-muted me-1"></i> Follow-up Method</dt>
             <dd class="col-sm-9"><?= e(followUpLabel($submission['follow_up_method'])) ?></dd>
 
-            <dt class="col-sm-3">Email</dt>
+            <dt class="col-sm-3"><i class="bi bi-envelope text-muted me-1"></i> Email</dt>
             <dd class="col-sm-9"><?= $submission['email'] ? e($submission['email']) : '<span class="text-muted">&mdash;</span>' ?></dd>
-
-            <dt class="col-sm-3">Message</dt>
-            <dd class="col-sm-9"><?= $submission['message'] ? nl2br(e($submission['message'])) : '<span class="text-muted">&mdash;</span>' ?></dd>
         </dl>
+
+        <hr>
+
+        <label for="message" class="form-label fw-semibold">
+            <i class="bi bi-chat-text text-muted me-1"></i> Message
+        </label>
+        <form method="post" action="/admin/submissions/update_message.php">
+            <?= Csrf::field() ?>
+            <input type="hidden" name="id" value="<?= (int) $submission['id'] ?>">
+            <textarea class="form-control mb-2" id="message" name="message" rows="3"
+                      maxlength="2000"><?= e($submission['message'] ?? '') ?></textarea>
+            <button type="submit" class="btn btn-sm btn-primary">
+                <i class="bi bi-check-lg"></i> Save Message
+            </button>
+        </form>
             </div>
         </div>
     </div>

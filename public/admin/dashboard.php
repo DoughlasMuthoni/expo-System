@@ -24,6 +24,7 @@ require __DIR__ . '/../../includes/admin_header.php';
     <div class="col-6 col-md-3">
         <div class="card stat-tile h-100">
             <div class="card-body">
+                <div class="stat-icon"><i class="bi bi-qr-code"></i></div>
                 <div class="stat-label">Total Expos</div>
                 <div class="stat-value"><?= (int) $totalExpos ?></div>
                 <div class="stat-sub"><?= (int) $activeExpos ?> active</div>
@@ -33,6 +34,7 @@ require __DIR__ . '/../../includes/admin_header.php';
     <div class="col-6 col-md-3">
         <div class="card stat-tile h-100">
             <div class="card-body">
+                <div class="stat-icon"><i class="bi bi-people"></i></div>
                 <div class="stat-label">Total Submissions</div>
                 <div class="stat-value"><?= (int) $totalSubmissions ?></div>
                 <div class="stat-sub">all expos, all time</div>
@@ -42,6 +44,7 @@ require __DIR__ . '/../../includes/admin_header.php';
     <div class="col-6 col-md-3">
         <div class="card stat-tile h-100">
             <div class="card-body">
+                <div class="stat-icon"><i class="bi bi-calendar-check"></i></div>
                 <div class="stat-label">Submissions Today</div>
                 <div class="stat-value"><?= (int) $submissionsToday ?></div>
                 <div class="stat-sub">&nbsp;</div>
@@ -51,10 +54,11 @@ require __DIR__ . '/../../includes/admin_header.php';
     <div class="col-6 col-md-3">
         <div class="card stat-tile h-100 <?= $possibleDuplicates > 0 ? 'stat-tile-warning' : '' ?>">
             <div class="card-body">
+                <div class="stat-icon"><i class="bi bi-exclamation-triangle"></i></div>
                 <div class="stat-label">Possible Duplicates</div>
                 <div class="stat-value"><?= (int) $possibleDuplicates ?></div>
                 <?php if ($possibleDuplicates > 0): ?>
-                    <div class="stat-sub stat-sub-warning">&#9888; flagged for review</div>
+                    <div class="stat-sub stat-sub-warning">flagged for review</div>
                 <?php else: ?>
                     <div class="stat-sub">none flagged</div>
                 <?php endif; ?>
@@ -65,11 +69,19 @@ require __DIR__ . '/../../includes/admin_header.php';
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="h5 mb-0">Expos Overview</h2>
-    <a href="/admin/expos/index.php" class="btn btn-sm btn-outline-secondary">Manage Expos</a>
+    <a href="/admin/expos/index.php" class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-gear"></i> Manage Expos
+    </a>
 </div>
 
 <?php if (empty($expoBreakdown)): ?>
-    <p class="text-muted">No expos yet. <a href="/admin/expos/create.php">Create one</a> to get started.</p>
+    <div class="empty-state">
+        <i class="bi bi-qr-code empty-state-icon"></i>
+        <p class="mb-2">No expos yet.</p>
+        <a href="/admin/expos/create.php" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-lg"></i> Create Your First Expo
+        </a>
+    </div>
 <?php else: ?>
 
     <!-- Mobile: stacked cards — a shrunk table here leaves dead space and

@@ -22,3 +22,12 @@ $pageTitle ??= 'Waterlift Solar';
             <div class="text-center mb-4">
                 <img src="/assets/img/waterlift-logo.jpeg" alt="Waterlift Solar" class="img-fluid public-logo">
             </div>
+
+            <?php $currentLang = $_SESSION['lang'] ?? 'en'; ?>
+            <div class="text-center mb-3">
+                <a href="?slug=<?= urlencode($slug ?? '') ?>&lang=en"
+                   class="small text-decoration-none <?= $currentLang === 'en' ? 'fw-bold text-body' : 'text-muted' ?>">EN</a>
+                <span class="text-muted mx-1">|</span>
+                <a href="?slug=<?= urlencode($slug ?? '') ?>&lang=sw"
+                   class="small text-decoration-none <?= $currentLang === 'sw' ? 'fw-bold text-body' : 'text-muted' ?>">SW</a>
+            </div>

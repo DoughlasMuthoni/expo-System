@@ -23,7 +23,9 @@ $renderQr = static function (array $expo): void {
             <form method="post" action="/admin/expos/regenerate_qr.php">
                 <?= Csrf::field() ?>
                 <input type="hidden" name="id" value="<?= (int) $expo['id'] ?>">
-                <button type="submit" class="btn btn-sm btn-outline-secondary">Regenerate</button>
+                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-clockwise"></i> Regenerate
+                </button>
             </form>
         </div>
         <?php
@@ -33,12 +35,22 @@ $renderQr = static function (array $expo): void {
 /** Shared action buttons — same content in the table and the mobile card. */
 $renderActions = static function (array $expo): void {
     ?>
-    <a href="/admin/submissions/index.php?expo_id=<?= (int) $expo['id'] ?>" class="btn btn-sm btn-outline-secondary">Submissions</a>
-    <a href="/admin/expos/edit.php?id=<?= (int) $expo['id'] ?>" class="btn btn-sm btn-outline-secondary">Edit</a>
+    <a href="/admin/submissions/index.php?expo_id=<?= (int) $expo['id'] ?>" class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-inbox"></i> Submissions
+    </a>
+    <a href="/admin/expos/edit.php?id=<?= (int) $expo['id'] ?>" class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-pencil"></i> Edit
+    </a>
+    <?php if (QrGenerator::exists($expo['slug'])): ?>
+        <a href="/admin/expos/flier.php?id=<?= (int) $expo['id'] ?>" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-file-earmark-image"></i> Flier
+        </a>
+    <?php endif; ?>
     <form method="post" action="/admin/expos/toggle.php" class="d-inline">
         <?= Csrf::field() ?>
         <input type="hidden" name="id" value="<?= (int) $expo['id'] ?>">
         <button type="submit" class="btn btn-sm btn-outline-<?= $expo['is_active'] ? 'warning' : 'success' ?>">
+            <i class="bi bi-<?= $expo['is_active'] ? 'pause-circle' : 'play-circle' ?>"></i>
             <?= $expo['is_active'] ? 'Deactivate' : 'Activate' ?>
         </button>
     </form>
@@ -51,11 +63,19 @@ require __DIR__ . '/../../../includes/admin_header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0">Expos</h1>
-    <a href="/admin/expos/create.php" class="btn btn-primary">+ New Expo</a>
+    <a href="/admin/expos/create.php" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> New Expo
+    </a>
 </div>
 
 <?php if (empty($expos)): ?>
-    <p class="text-muted">No expos yet. Create one to generate its QR code.</p>
+    <div class="empty-state">
+        <i class="bi bi-qr-code empty-state-icon"></i>
+        <p class="mb-2">No expos yet.</p>
+        <a href="/admin/expos/create.php" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-lg"></i> Create Your First Expo
+        </a>
+    </div>
 <?php else: ?>
 
     <!-- Mobile: stacked cards. A table's fixed columns leave awkward dead

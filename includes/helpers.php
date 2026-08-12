@@ -18,6 +18,25 @@ function redirect(string $path): void
     exit;
 }
 
+/**
+ * Translate a public-form UI string key into the visitor's chosen language
+ * (see includes/translations.php). Admin pages never call this — the
+ * admin UI itself stays English-only; followUpLabel() below is what admin
+ * pages use to display a submission's follow-up method.
+ */
+function t(string $key): string
+{
+    static $strings = null;
+
+    if ($strings === null) {
+        $strings = require __DIR__ . '/translations.php';
+    }
+
+    $lang = $_SESSION['lang'] ?? 'en';
+
+    return $strings[$lang][$key] ?? $strings['en'][$key] ?? $key;
+}
+
 function followUpLabel(string $value): string
 {
     return match ($value) {

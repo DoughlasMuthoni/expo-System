@@ -1,15 +1,52 @@
+@charset "UTF-8";
 /* Waterlift Solar brand palette, sampled from public/assets/img/waterlift-logo.jpeg.
    Shared by admin and public pages so both read as one system. */
 
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
 :root {
+    /* Core brand colors */
     --wl-navy: #201b5c;
     --wl-blue: #2fa5df;
     --wl-orange: #f1721e;
     --wl-navy-rgb: 32, 27, 92;
+    --wl-blue-rgb: 47, 165, 223;
+    --wl-orange-rgb: 241, 114, 30;
+
+    /* Soft tints for backgrounds/badges -- same hues, low-saturation surfaces */
+    --wl-navy-tint: #eeedf6;
+    --wl-blue-tint: #eaf6fc;
+    --wl-orange-tint: #fdf0e7;
+
+    /* Shared scale so admin and public surfaces feel like one system */
+    --wl-radius-sm: 8px;
+    --wl-radius-md: 12px;
+    --wl-radius-lg: 18px;
+    --wl-shadow-sm: 0 1px 3px rgba(var(--wl-navy-rgb), 0.08);
+    --wl-shadow-md: 0 4px 16px rgba(var(--wl-navy-rgb), 0.10);
+    --wl-border-color: #e5e3f0;
+
+    --wl-font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+    font-family: var(--wl-font);
+}
+
+h1, h2, h3, h4, h5, h6,
+.navbar-brand {
+    font-family: var(--wl-font);
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 .navbar-dark.bg-dark {
     background-color: var(--wl-navy) !important;
+}
+
+.btn {
+    font-weight: 600;
+    border-radius: var(--wl-radius-sm);
 }
 
 .btn-primary {
@@ -26,7 +63,31 @@ a {
     color: var(--wl-blue);
 }
 
+.badge {
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 0.4em 0.75em;
+}
+
 .badge.bg-warning {
     color: #fff;
     background-color: var(--wl-orange) !important;
+}
+
+.card {
+    border-color: var(--wl-border-color);
+    border-radius: var(--wl-radius-md);
+    box-shadow: var(--wl-shadow-sm);
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+    border-color: var(--wl-blue);
+    box-shadow: 0 0 0 0.2rem rgba(var(--wl-blue-rgb), 0.2);
+}
+
+.form-check-input:checked {
+    background-color: var(--wl-blue);
+    border-color: var(--wl-blue);
 }

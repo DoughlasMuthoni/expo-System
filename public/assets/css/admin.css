@@ -1,11 +1,56 @@
-/* Waterlift Solar Expo System — admin overrides. */
+@charset "UTF-8";
+/* Waterlift Solar Expo System -- admin overrides. */
+
+body {
+    background-color: #f6f7fb;
+}
 
 .tabular-nums {
     font-variant-numeric: tabular-nums;
 }
 
-/* Stat tiles: label (muted, small caps) + value (semibold, proportional
-   figures — these are standalone numbers, not a column, so no tabular-nums). */
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 8px rgba(var(--wl-navy-rgb), 0.15);
+}
+
+.navbar .nav-link {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.navbar .nav-link.active {
+    color: #fff !important;
+    font-weight: 600;
+}
+
+/* Auth card (login page) */
+.auth-card {
+    border-top: 4px solid var(--wl-blue);
+}
+
+/* Stat tiles: icon in a soft tinted circle + label (muted, small caps) +
+   value (semibold, proportional figures -- standalone numbers, not a column). */
+.stat-tile .stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--wl-blue-tint);
+    color: var(--wl-blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    margin-bottom: 0.65rem;
+}
+
+.stat-tile-warning .stat-icon {
+    background: var(--wl-orange-tint);
+    color: var(--wl-orange);
+}
+
 .stat-tile .stat-label {
     font-size: .8rem;
     text-transform: uppercase;
@@ -16,7 +61,7 @@
 
 .stat-tile .stat-value {
     font-size: 1.9rem;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.1;
 }
 
@@ -26,7 +71,7 @@
     margin-top: .25rem;
 }
 
-/* Possible-duplicates tile only turns this on when count > 0 — color plus
+/* Possible-duplicates tile only turns this on when count > 0 -- color plus
    an icon and label, never color alone (see dataviz skill status-color rule). */
 .stat-tile-warning {
     border-color: var(--wl-orange);
@@ -35,4 +80,46 @@
 .stat-sub-warning {
     color: var(--wl-orange);
     font-weight: 600;
+}
+
+/* Expo / overview cards (mobile stacked-card views) -- subtle lift on hover,
+   appropriate here since this is a desktop-first admin tool. */
+.expo-card,
+.overview-card {
+    transition: box-shadow .15s ease, transform .15s ease;
+}
+
+.expo-card:hover,
+.overview-card:hover {
+    box-shadow: var(--wl-shadow-md);
+    transform: translateY(-1px);
+}
+
+/* Tables */
+.table > thead > tr > th {
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: #6c757d;
+    border-bottom-width: 1px;
+    background-color: #fafafd;
+}
+
+.table-responsive {
+    border-radius: var(--wl-radius-md);
+    overflow: hidden;
+}
+
+/* Empty states */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: #6c757d;
+}
+
+.empty-state .empty-state-icon {
+    font-size: 2rem;
+    color: var(--wl-blue);
+    margin-bottom: 0.75rem;
+    display: block;
 }
