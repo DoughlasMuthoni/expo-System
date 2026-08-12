@@ -24,9 +24,14 @@ require __DIR__ . '/../../includes/public_header.php';
             <?= e(t('success_generic')) ?>
         <?php endif; ?>
     </p>
-    <a href="/assets/waterlift-solar.vcf" download class="btn btn-outline-primary btn-sm">
-        <?= e(t('save_contact')) ?>
-    </a>
+    <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
+        <a href="/assets/waterlift-solar.vcf" download class="btn btn-outline-primary btn-sm">
+            <?= e(t('save_contact')) ?>
+        </a>
+        <a href="/assets/waterlift-solar-profile.pdf" download class="btn btn-outline-primary btn-sm">
+            <?= e(t('download_profile')) ?>
+        </a>
+    </div>
 </div>
 <?php
 require __DIR__ . '/../../includes/public_footer.php';

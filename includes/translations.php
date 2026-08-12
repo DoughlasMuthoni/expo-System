@@ -50,6 +50,7 @@ return [
         'success_with_expo'  => 'Thanks for stopping by our %s booth. A member of the Waterlift Solar team will be in touch soon.',
         'success_generic'    => 'Thanks for your interest in Waterlift Solar. A member of our team will be in touch soon.',
         'save_contact'       => 'Save Our Contact',
+        'download_profile'   => 'Download Company Profile (PDF)',
     ],
     'sw' => [
         'expo_not_found_title' => 'Hatukuweza kupata tukio hilo',
@@ -91,5 +92,6 @@ return [
         'success_with_expo'  => 'Asante kwa kutembelea banda letu la %s. Mwanachama wa timu ya Waterlift Solar atawasiliana nawe hivi karibuni.',
         'success_generic'    => 'Asante kwa kupendezwa kwako na Waterlift Solar. Mwanachama wa timu yetu atawasiliana nawe hivi karibuni.',
         'save_contact'       => 'Hifadhi Anwani Yetu',
+        'download_profile'   => 'Pakua Wasifu wa Kampuni (PDF)',
     ],
 ];
